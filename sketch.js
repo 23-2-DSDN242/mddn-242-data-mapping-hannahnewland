@@ -1,6 +1,7 @@
 let sourceImg=null;
 let maskImg=null;
 
+
 // change these three lines as appropiate
 let sourceFile = "input_1.jpg";
 let maskFile   = "mask_1.png";
@@ -9,7 +10,7 @@ let outputFile = "output_1.png";
 function preload() {
   sourceImg = loadImage(sourceFile);
   maskImg = loadImage(maskFile);
-  layeredImg = loadImage("layeredImage.png");
+  layeredImg = loadImage("layeredimage.png");
 }
 
 function setup () {
@@ -21,12 +22,13 @@ function setup () {
   background(0, 0, 128);
   sourceImg.loadPixels();
   maskImg.loadPixels();
-  colorMode(HSB);
+  layeredImg.loadPixels();
+ 
 }
 
 let X_STOP = 1920;
 let Y_STOP = 1080;
-let DIAMETER = 11;
+let DIAMETER = 15;
 
 // return a custom pixel kernel with given diameter (should be odd). will return array[diameter][diameter]
 function makePixelKernel(diameter, is_reverse=false, is_diamond=false) {
@@ -68,7 +70,7 @@ function makePixelKernel(diameter, is_reverse=false, is_diamond=false) {
   return kernel;
 }
 
-let renderCounter=5;
+let renderCounter=0;
 function draw () {
   // make kernel
   is_reverse = true;
@@ -81,14 +83,22 @@ function draw () {
     for(let i=5; i<X_STOP; i++) {
       colorMode(RGB);
       let pix = [0, 0, 0, 255];
-
-      let layered = layeredImg.get(i, j);
+      let pixBlur = sourceImg.get(i, j);
+      let col = color(pixBlur);
       let mask = maskImg.get(i, j);
+      let layered = layeredImg.get(i, j);
+
+
       if (mask[1] > 128) {
-        set(i, j, layered);
-        pix = sourceImg.get(i, j);
+        set(i, j, pixBlur);
+        pix = layeredImg.get(i, j);
       }
       else {
+        let new_col = [0, 0, 0, 255];
+        for(let k=0; k<3; k++) {
+          new_col[k] = map(0, 0, 100, pixBlur[k], layered[k]);
+        }
+        set(i, j, new_col);
         let sum_rgb = [0, 0, 0]
         let num_cells = 0;
         for(let wx=0;wx<DIAMETER;wx++){
@@ -109,6 +119,7 @@ function draw () {
       }
 
       set(i, j, pix);
+      
     }
   }
   renderCounter = renderCounter + num_lines_to_draw;
