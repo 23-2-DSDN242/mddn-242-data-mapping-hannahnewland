@@ -3,14 +3,14 @@ let maskImg=null;
 let layerImg=null;
 
 // change these three lines as appropiate
-let sourceFile = "input_1.jpg";
-let maskFile   = "mask_1.png";
-let outputFile = "output_1.png";
+let sourceFile = "input_5.jpg";
+let maskFile   = "mask_5.png";
+let outputFile = "output_5.png";
 
 function preload() {
   sourceImg = loadImage(sourceFile);
   maskImg = loadImage(maskFile);
-  layerImg = loadImage("layeredimage.png");
+  layerImg = loadImage("layeredimage5.png");
 }
 
 function setup () {
@@ -37,17 +37,16 @@ function draw () {
       colorMode(RGB);
       let pix = sourceImg.get(i, j);
       // create a color from the values (always RGB)
-      let col = color(pix);
       let mask = maskImg.get(i, j);
       let layer = layerImg.get(i, j);
 
       if(mask[0] > 128) {
-        set(i, j, pix);
+        set(i, j, layer);
       }
       else {
         let new_col = [0, 0, 0, 255];
         for(let k=0; k<3; k++) {
-          new_col[k] = map(40, 0, 100, pix[k], layer[k]);
+          new_col[k] = map(0, 0, 100, pix[k], layer[k]);
         }
         // let new_col = color(h, s,  newBrt);
         set(i, j, new_col);
