@@ -3,9 +3,9 @@ let maskImg=null;
 
 
 // change these three lines as appropiate
-let sourceFile = "input_1.jpg";
-let maskFile   = "mask_1.png";
-let outputFile = "output_1.png";
+let sourceFile = "input_8.jpg";
+let maskFile   = "mask_8.png";
+let outputFile = "output_8.png";
 
 function preload() {
   sourceImg = loadImage(sourceFile);
@@ -28,7 +28,7 @@ function setup () {
 
 let X_STOP = 1920;
 let Y_STOP = 1080;
-let DIAMETER = 15;
+let DIAMETER = 11;
 
 // return a custom pixel kernel with given diameter (should be odd). will return array[diameter][diameter]
 function makePixelKernel(diameter, is_reverse=false, is_diamond=false) {
@@ -96,7 +96,7 @@ function draw () {
       else {
         let new_col = [0, 0, 0, 255];
         for(let k=0; k<3; k++) {
-          new_col[k] = map(0, 0, 100, pixBlur[k], layered[k]);
+          new_col[k] = map(0, 20, 100, pixBlur[k], layered[k]);
         }
         set(i, j, new_col);
         let sum_rgb = [0, 0, 0]
@@ -130,7 +130,7 @@ function draw () {
     console.log("Done!")
     noLoop();
     // uncomment this to save the result
-    // saveArtworkImage(outputFile);
+    saveArtworkImage(outputFile);
   }
 }
 
